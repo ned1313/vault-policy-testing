@@ -1,0 +1,7 @@
+tests:
+  - path: 'secret/data/taco'
+    action: read
+    result: true
+  - path: 'secret/data/taco'
+    action: write
+    result: false
