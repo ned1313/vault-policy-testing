@@ -3,32 +3,47 @@ import yaml
 import hvac, os, argparse, datetime
 from requests import Request, Session
 
-# Create an action to request conversion
-request_mapping = {
-    "read": "GET",
-    "write": "POST",
-    "delete": "DELETE",
-    "list": "LIST"
-}
-
-# Create a test function
-def vault_test(test, admin, client):
-    # Print the path
-    print(test["path"])
-    # Check to see if the path exists
-    # If path exists, Log it
-    # If path does not exist, throw an error
+def test_capabilities(test, admin, client, policy_name):
+    test_result = {
+        "result": "fail",
+        "message": "Test failed for unknown reason"
+    }
     # Print the action
     print(test["action"])
     s = Session()
-    headers = {'X-Vault-Token': client.token}
-    req = Request('GET', client.url + "/v1" + test["path"], headers=headers)
+    headers = {'X-Vault-Token': admin.token}
+    payload = '''
+    {
+        "token": "%s",
+        "paths": ["%s"]
+    }
+    ''' % (client.token, test["path"])
+    print(payload)
+
+    req = Request('POST', admin.url + "/v1/sys/capabilities", headers=headers, data=payload)
     prepped = req.prepare()
     resp = s.send(prepped)
-    # Attempt the action on the path
+    
+    capabilities = resp.json()["capabilities"]
+    print(capabilities)
+
+    if test["action"] in capabilities:
+        if test["result"]:
+            test_result["message"] = "Test passed: " + policy_name + " has " + test["action"] + " capabilities on " + test["path"]
+            test_result["result"] = "pass"
+        if not test["result"]:
+            test_result["message"] = "Test failed: " + policy_name + " has " + test["action"] + " capabilities on " + test["path"]
+    else:
+        if test["result"]:
+            test_result["message"] = "Test failed: " + policy_name + " does not have " + test["action"] + " capabilities on " + test["path"]
+        if not test["result"]:
+            test_result["message"] ="Test passed: " + policy_name + " does not have " + test["action"] + " capabilities on " + test["path"]
+            test_result["result"] = "pass"
+
     # Print the expected result
-    print(test["result"])
-    print(resp.status_code)
+    print(test_result["message"])
+
+    return test_result
     # Compare the expected result to the actual result
 
 # Parse the policy name and test file name from the command line
@@ -73,8 +88,16 @@ clientPolicy = hvac.Client(url=os.environ['VAULT_ADDR'], token=token["auth"]["cl
 with open(args.tests) as f:
     tests = yaml.safe_load(f)
 
+results = []
+
 for test in tests["tests"]:
-    vault_test(test, clientAdmin, clientPolicy)
+    results.append(test_capabilities(test, clientAdmin, clientPolicy, policy_name))
 
 
+print(results)
 
+# Revoke the client token
+clientPolicy.auth.token.revoke_self()
+
+# Delete the policy
+clientAdmin.sys.delete_policy(name=policy_name)
