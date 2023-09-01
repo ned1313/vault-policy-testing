@@ -1,0 +1,11 @@
+certifi==2023.7.22
+charset-normalizer==3.2.0
+DateTime==5.2
+hvac==1.1.1
+idna==3.4
+pyhcl==0.4.4
+pytz==2023.3
+PyYAML==6.0.1
+requests==2.31.0
+urllib3==2.0.4
+zope.interface==6.0

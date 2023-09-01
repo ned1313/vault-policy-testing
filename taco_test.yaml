@@ -3,11 +3,11 @@ tests:
     action: read
     result: false
   - path: 'secret/data/taco'
-    action: write
+    action: update
     result: false
   - path: 'secret/data/taco/recipe'
     action: read
     result: true
-  - path: 'secret/data/taco/recipe'
-    action: write
-    result: false
+  - path: 'mykv/data/taco/recipe'
+    action: create
+    result: true
