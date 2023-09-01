@@ -1,6 +1,6 @@
 # Import the PyYAML
 import yaml
-import hvac, os, argparse, datetime
+import hvac, os, argparse, datetime, hcl
 from requests import Request, Session
 
 def test_capabilities(test, admin, client, policy_name):
@@ -45,6 +45,14 @@ def test_capabilities(test, admin, client, policy_name):
 
     return test_result
     # Compare the expected result to the actual result
+
+# Convert the policy file to JSON and write to file
+def policy_to_json(policy_file):
+    json_file = policy_file + ".json"
+    with open(policy_file) as f:
+        load_policy = hcl.load(f)
+    with open(json_file, 'w') as f:
+        f.write(hcl.dumps(load_policy))
 
 # Parse the policy name and test file name from the command line
 parser = argparse.ArgumentParser(description='Read a YAML file and test a policy.')
