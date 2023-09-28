@@ -1,16 +1,1 @@
-{
-    "path": {
-        "secret/data/taco": {
-            "capabilities": [
-                "read"
-            ]
-        },
-        "mykv/*": {
-            "capabilities": [
-                "read",
-                "create",
-                "update"
-            ]
-        }
-    }
-}
+{"path": {"secret/data/taco": {"capabilities": ["read"]}, "mykv/*": {"capabilities": ["read", "create", "update"]}}}
