@@ -1,7 +1,7 @@
 # Import the PyYAML
 import yaml, json
 import hvac, os, argparse, datetime, hcl, glob
-import subprocess, logging
+import subprocess, logging, re
 from requests import Request, Session
 
 def test_capabilities(test, admin, client, policy_name):
@@ -32,25 +32,31 @@ def test_capabilities(test, admin, client, policy_name):
     test_result["actual_actions"] = capabilities
     logging.info(capabilities)
 
+    # Check if sudo is required
+    sudo_required = needs_sudo(test["path"], capabilities)
+
     # So capture the intersection first and apply the two tests
     intersection = set(test["actions"]).intersection(set(capabilities))
     # If the desired result is true, the intersection of the policy and capabilities should be the same as the policy
     if test["result"]:
-        if intersection == set(test["actions"]):
+        if sudo_required and "sudo" not in capabilities:
+            test_result["message"] = "Test failed: " + policy_name + " does not have sudo capability on " + test["path"]
+            test_result["test_result"] = "fail"
+        elif intersection == set(test["actions"]):
             test_result["message"] = "Test passed: " + policy_name + " has [" + ' '.join(test["actions"]) + "] capabilities on " + test["path"]
-            test_result["result"] = "pass"
+            test_result["test_result"] = "pass"
         else:
             test_result["message"] = "Test failed: " + policy_name + " does not have some of [" + ' '.join(test["actions"]) + "] capabilities on " + test["path"]
-            test_result["result"] = "fail"
+            test_result["test_result"] = "fail"
 
     # If the desired result is false, the intersection of the policy and capabilities should be empty
     else:
         if intersection == set():
             test_result["message"] = "Test passed: " + policy_name + " does not have [" + ' '.join(test["actions"]) + "] capabilities on " + test["path"]
-            test_result["result"] = "pass"
+            test_result["test_result"] = "pass"
         else:
             test_result["message"] = "Test failed: " + policy_name + " has some of [" + ' '.join(test["actions"]) + "] capabilities on " + test["path"]
-            test_result["result"] = "fail"
+            test_result["test_result"] = "fail"
 
     # Log the result of the test
     logging.info(test_result["message"])
@@ -95,7 +101,20 @@ def prepare_policy(policy_file_path, test_file_path, admin):
 
     # Return results
     return results
-    
+
+def needs_sudo(test_path,test_actions):
+    # Check if the test path starts with one of the paths that needs sudo
+    if test_path.split('/')[0] in sudo_policy_paths["sudo_prefixes"]:
+        logging.info(test_path + " starts with a sudo prefix")
+        # Check each path in the sudo policy paths
+        for sudo_path in sudo_policy_paths["sudo_paths"]:
+            # If the test path starts with the sudo path, check actions
+            if re.search(sudo_path["path"], test_path):
+                logging.info(test_path + " matched with " + sudo_path["path"])
+                if set(test_actions).intersection(set(sudo_path["actions"])) != set():
+                    logging.info("Sudo required")
+                    return True
+    return False
     
 # Parse the arguments
 parser = argparse.ArgumentParser(description='Read policies and tests. Can be individual policies or a directory of policies.')
@@ -165,6 +184,10 @@ if argumentSet == 2:
 # Connect to Vault
 clientAdmin = hvac.Client(url=os.environ['VAULT_ADDR'], token=os.environ['VAULT_TOKEN'])
 clientAdmin.is_authenticated()
+
+# Load sudo policy path data
+with open('sudo_paths.json') as f:
+    sudo_policy_paths = json.load(f)
 
 if argumentSet == 1:
     results = prepare_policy(args.policy, args.tests, clientAdmin)

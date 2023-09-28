@@ -1,118 +1,118 @@
 {
     "sudo_paths": [
-        { "path": "auth/token/accessors",
-          "action": ["list"]
+        { "path": "auth/token/accessors$",
+          "actions": ["list"]
         },
-        { "path": "auth/token/create",
-          "action": ["create","update"]
-        },
-        {
-            "path": "auth/token/revoke-orphan",
-            "action": ["create","update"]
+        { "path": "auth/token/create$",
+          "actions": ["create","update"]
         },
         {
-            "path": "pki/root/sign-self-issued",
-            "action": ["create","update"]
+            "path": "auth/token/revoke-orphan$",
+            "actions": ["create","update"]
         },
         {
-            "path": "pki/root",
-            "action": ["delete"]
+            "path": "pki/root/sign-self-issued$",
+            "actions": ["create","update"]
         },
         {
-            "path": "sys/audit",
-            "action": ["read"]
+            "path": "pki/root$",
+            "actions": ["delete"]
+        },
+        {
+            "path": "sys/audit$",
+            "actions": ["read"]
         },
         {
             "path": "sys/audit/.*",
-            "action": ["create","update","delete"]
+            "actions": ["create","update","delete"]
         },
         {
             "path": "sys/auth/.*",
-            "action": ["read","create","update","delete"]
+            "actions": ["read","create","update","delete"]
         },
         {
-            "path": "sys/auth/.*/tune",
-            "action": ["read","create","update"]
+            "path": "sys/auth/.*/tune$",
+            "actions": ["read","create","update"]
         },
         {
-            "path": "sys/config/auditing/request-headers",
-            "action": ["read"]
+            "path": "sys/config/auditing/request-headers$",
+            "actions": ["read"]
         },
         {
             "path": "sys/config/auditing/request-headers/.*",
-            "action": ["read","create","update","delete"]
+            "actions": ["read","create","update","delete"]
         },
         {
-            "path": "sys/config/cors",
-            "action": ["read","create","update","delete"]
+            "path": "sys/config/cors$",
+            "actions": ["read","create","update","delete"]
         },
         {
-            "path": "sys/config/ui/headers",
-            "action": ["read","list"]
+            "path": "sys/config/ui/headers$",
+            "actions": ["read","list"]
         },
         {
             "path": "sys/config/ui/headers/.*",
-            "action": ["create","update","delete"]
+            "actions": ["create","update","delete"]
         },
         {
             "path": "sys/internal/inspect/router/.*",
-            "action": ["read"]
+            "actions": ["read"]
         },
         {
             "path": "sys/leases/lookup/.*",
-            "action": ["list"]
+            "actions": ["list"]
         },
         {
             "path": "sys/leases/revoke-force/.*",
-            "action": ["create","update"]
+            "actions": ["create","update"]
         },
         {
             "path": "sys/leases/revoke-prefix/.*",
-            "action": ["create","update"]
+            "actions": ["create","update"]
         },
         {
             "path": "sys/plugins/catalog/.*",
-            "action": ["read","create","update","delete"]
+            "actions": ["read","create","update","delete"]
         },
         {
             "path": "sys/raw/.*",
-            "action": ["read","create","update","delete","list"]
+            "actions": ["read","create","update","delete","list"]
         },
         {
-            "path": "sys/remount",
-            "action": ["create","update"]
+            "path": "sys/remount$",
+            "actions": ["create","update"]
         },
         {
-            "path": "sys/replication/reindex",
-            "action": ["create","update"]
+            "path": "sys/replication/reindex$",
+            "actions": ["create","update"]
         },
         {
-            "path": "sys/replication/performance/primary/secondary-token",
-            "action": ["create","update"]
+            "path": "sys/replication/performance/primary/secondary-token$",
+            "actions": ["create","update"]
         },
         {
-            "path": "sys/replication/dr/primary/secondary-token",
-            "action": ["create","update"]
+            "path": "sys/replication/dr/primary/secondary-token$",
+            "actions": ["create","update"]
         },
         {
-            "path": "sys/rotate",
-            "action": ["create","update"]
+            "path": "sys/rotate$",
+            "actions": ["create","update"]
         },
         {
-            "path": "sys/seal",
-            "action": ["create","update"]
+            "path": "sys/seal$",
+            "actions": ["create","update"]
         },
         {
-            "path": "sys/step-down",
-            "action": ["create","update"]
+            "path": "sys/step-down$",
+            "actions": ["create","update"]
         },
         {
-            "path": "sys/storage/raft/snapshot-auto/config",
-            "action": ["list"]
+            "path": "sys/storage/raft/snapshot-auto/config$",
+            "actions": ["list"]
         },
         {
             "path": "sys/storage/raft/snapshot-auto/config/.*",
-            "action": ["read","create","update","delete"]
+            "actions": ["read","create","update","delete"]
         }
     ],
     "sudo_prefixes": [

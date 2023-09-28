@@ -9,9 +9,12 @@
 * Add option to spin up Dev server auto-magically
   * Done: use the `-v` flag
 * Clean up print statements
+  * Done: only print state is the tests at the end
 * Add logging
+  * Done: added logging
 * Convert HCL to JSON for OPA: https://pypi.org/project/pyhcl/
   * Done: use the `-j` flag
 * Add support for multiple policies using a folder structure
   * Done: use the `-d` flag
 * Check against sudo policies
+  * Done: add function and logic checking for when a policy passes

@@ -1,0 +1,4 @@
+tests:
+  - path: 'sys/replication/reindex'
+    actions: [create,update]
+    result: true
