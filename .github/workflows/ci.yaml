@@ -6,9 +6,6 @@ jobs:
     build:
         runs-on: ubuntu-latest
         name: 'CI Checks'
-        defaults:
-            run:
-                shell: bash
         container:
             image: hashicorp/vault
             env:
