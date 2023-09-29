@@ -8,6 +8,6 @@ tests:
   - path: 'secret/data/taco/recipe'
     actions: [read, list]
     result: true
-  - path: 'mykv/data/taco/recipe'
+  - path: 'my_kv/data/taco/recipe'
     actions: [create, read]
     result: true

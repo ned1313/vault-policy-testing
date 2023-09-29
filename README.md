@@ -12,9 +12,9 @@ The test suite will run as part of a CI/CD process. I imagine that initial tests
 
 Each test should include the following:
 
-* The path to be tested
-* The action(s) to execute
-* The desired result of the action
+* `path` - The path to be tested
+* `actions` - List of action(s) to test
+* `result` - The desired result of the action
   * `true` - the action(s) are allowed
   * `false` - the action(s) are denied
 

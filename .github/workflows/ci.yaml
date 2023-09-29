@@ -1,0 +1,25 @@
+name: 'CI Checks'
+
+on: [push]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        name: 'CI Checks'
+        defaults:
+            run:
+                shell: bash
+
+        steps:
+
+          - name: Checkout
+            uses: actions/checkout@v2
+          - name: Run Vault Tests
+            id: vault-tests
+            uses: ./
+            with:
+                directory: 'policies'
+          - name: Print Results
+            run: |
+                echo "Results: ${{ steps.vault-tests.outputs.results }}"
+
