@@ -214,6 +214,9 @@ if argumentSet == 2:
     logging.info("All tests completed")
     print(json.dumps(all_tests))
 
+    if os.environ["GITHUB_ACTIONS"]:
+        print(f"::set-output name=test_results::{json.dumps(all_tests)}")
+
 if args.vaultdev:
     logging.info("Killing Vault dev server")
     vault_process.terminate()
