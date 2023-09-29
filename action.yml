@@ -23,16 +23,16 @@ runs:
         python-version: '3.11'  
     - name: Install Dependencies
       run: pip install -r requirements.txt
-      shell: bash
+      shell: sh
     - name: Pass Inputs to Shell
       run: |
               echo "TEST_DIRECTORY=${{ inputs.directory }}" >> $GITHUB_ENV
               echo "DEV_SERVER=${{ inputs.dev-server }}" >> $GITHUB_ENV
-      shell: bash
+      shell: sh
     - name: Run policy tests
       id: run-tests
       env:
         VAULT_ADDR: 'http://127.0.0.1:8200'
         VAULT_TOKEN: '1234567890qwertyuiopASDFGHJKL'
       run: python test_capabilities.py -d $TEST_DIRECTORY
-      shell: bash
+      shell: sh
