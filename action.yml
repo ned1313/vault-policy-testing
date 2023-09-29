@@ -34,5 +34,7 @@ runs:
       env:
         VAULT_ADDR: 'http://127.0.0.1:8200'
         VAULT_TOKEN: '1234567890qwertyuiopASDFGHJKL'
-      run: python test_capabilities.py -d $TEST_DIRECTORY
+      run: |
+              echo "{test_results}={$(python test_capabilities.py -d $TEST_DIRECTORY)}" >> $GITHUB_OUTPUT
+
       shell: bash
