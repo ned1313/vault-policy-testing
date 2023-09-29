@@ -24,6 +24,7 @@ jobs:
           #  run: |
           #      echo "Results: ${{ steps.vault-tests.outputs.results }}"
           - name: Vault Commands
+            shell: bash
             run: |
               curl http://127.0.0.1:8200/v1/sys/health
         
