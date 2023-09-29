@@ -34,7 +34,7 @@ runs:
     - name: Run policy tests
       id: run-tests
       env:
-        VAULT_ADDR: inputs.vault_address
-        VAULT_TOKEN: inputs.vault_token
+        VAULT_ADDR: ${{ inputs.vault_address }}
+        VAULT_TOKEN: ${{ inputs.vault_token }}
       run: python test_capabilities.py -d $TEST_DIRECTORY
       shell: bash
