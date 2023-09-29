@@ -1,5 +1,5 @@
 # Import the PyYAML
-import yaml, json
+import yaml, json, uuid
 import hvac, os, argparse, datetime, hcl, glob
 import subprocess, logging, re
 from requests import Request, Session
@@ -115,6 +115,13 @@ def needs_sudo(test_path,test_actions):
                     logging.info("Sudo required")
                     return True
     return False
+
+def set_multiline_output(name, value):
+    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+        delimiter = uuid.uuid1()
+        print(f'{name}<<{delimiter}', file=fh)
+        print(value, file=fh)
+        print(delimiter, file=fh)
     
 # Parse the arguments
 parser = argparse.ArgumentParser(description='Read policies and tests. Can be individual policies or a directory of policies.')
@@ -213,6 +220,9 @@ if argumentSet == 2:
             policy_to_json(policy_file)
     logging.info("All tests completed")
     print(json.dumps(all_tests))
+
+    if os.environ["GITHUB_ACTIONS"]:
+        set_multiline_output("test_results", json.dumps(all_tests))
 
 if args.vaultdev:
     logging.info("Killing Vault dev server")

@@ -23,6 +23,6 @@ jobs:
                 directory: 'policies'
           - name: Print Results
             run: |
-                echo "Results: ${{ steps.vault-tests.outputs.results }}"
+                echo "Results: ${{ steps.vault-tests.outputs.test_results }}"
         
 
