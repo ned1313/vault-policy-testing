@@ -9,9 +9,13 @@ jobs:
         defaults:
             run:
                 shell: bash
-
+        container:
+            image: hashicorp/vault
+            env:
+                VAULT_DEV_ROOT_TOKEN_ID: '1234567890qwertyuiopASDFGHJKL'
+            ports:
+                - 8200
         steps:
-
           - name: Checkout
             uses: actions/checkout@v2
           - name: Run Vault Tests
