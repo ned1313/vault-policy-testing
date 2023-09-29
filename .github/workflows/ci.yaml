@@ -27,6 +27,8 @@ jobs:
             with:
                 directory: 'policies'
                 vault_token: '1234567890qwertyuiopASDFGHJKL'
+          - name: Echo Test Results
+            run: echo "${{ steps.vault-tests.outputs.test_results }}"
           - name: Convert JSON to Table
             id: table
             uses: buildingcash/json-to-markdown-table-action@v1
