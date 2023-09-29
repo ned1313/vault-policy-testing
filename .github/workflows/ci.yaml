@@ -21,6 +21,7 @@ jobs:
             uses: ./
             with:
                 directory: 'policies'
+                vault_token: '1234567890qwertyuiopASDFGHJKL'
           - name: Print Results
             run: |
                 echo "Results: ${{ steps.vault-tests.outputs.test_results }}"

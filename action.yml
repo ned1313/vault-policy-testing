@@ -5,10 +5,13 @@ inputs:
   directory:
     description: 'Directory where policies can be found.'
     required: true
-  dev-server:
-    description: 'Whether to use a dev Vault instance. Set to true or false.'
+  vault_address:
+    description: 'Address of Vault Server'
+    required: false
+    default: 'http://127.0.0.1:8200'
+  vault_token:
+    description: 'Admin token for Vault Server'
     required: true
-    default: 'true'
 outputs:
   test_results:
     description: 'Json of test results.'
@@ -27,12 +30,13 @@ runs:
     - name: Pass Inputs to Shell
       run: |
               echo "TEST_DIRECTORY=${{ inputs.directory }}" >> $GITHUB_ENV
-              echo "DEV_SERVER=${{ inputs.dev-server }}" >> $GITHUB_ENV
+              echo "VAULT_TOKEN=${{ inputs.vault_token }}" >> $GITHUB_ENV
+              echo "VAULT_ADDR=${{ inputs.vault_address }}" >> $GITHUB_ENV
       shell: bash
     - name: Run policy tests
       id: run-tests
       env:
-        VAULT_ADDR: 'http://127.0.0.1:8200'
-        VAULT_TOKEN: '1234567890qwertyuiopASDFGHJKL'
+        VAULT_ADDR: $VAULT_ADDR
+        VAULT_TOKEN: $VAULT_TOKEN
       run: python test_capabilities.py -d $TEST_DIRECTORY
       shell: bash
