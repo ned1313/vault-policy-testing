@@ -30,13 +30,11 @@ runs:
     - name: Pass Inputs to Shell
       run: |
               echo "TEST_DIRECTORY=${{ inputs.directory }}" >> $GITHUB_ENV
-              echo "VAULT_TOKEN=${{ inputs.vault_token }}" >> $GITHUB_ENV
-              echo "VAULT_ADDR=${{ inputs.vault_address }}" >> $GITHUB_ENV
       shell: bash
     - name: Run policy tests
       id: run-tests
       env:
-        VAULT_ADDR: $VAULT_ADDR
-        VAULT_TOKEN: $VAULT_TOKEN
+        VAULT_ADDR: inputs.vault_address
+        VAULT_TOKEN: inputs.vault_token
       run: python test_capabilities.py -d $TEST_DIRECTORY
       shell: bash
