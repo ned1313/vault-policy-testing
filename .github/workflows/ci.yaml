@@ -16,17 +16,13 @@ jobs:
         steps:
           - name: Checkout
             uses: actions/checkout@v2
-          #- name: Run Vault Tests
-          #  id: vault-tests
-          #  uses: ./
-          #  with:
-          #      directory: 'policies'
-          #- name: Print Results
-          #  run: |
-          #      echo "Results: ${{ steps.vault-tests.outputs.results }}"
-          - name: Vault Commands
-            shell: bash
+          - name: Run Vault Tests
+            id: vault-tests
+            uses: ./
+            with:
+                directory: 'policies'
+          - name: Print Results
             run: |
-              curl http://127.0.0.1:8200/v1/sys/health
+                echo "Results: ${{ steps.vault-tests.outputs.results }}"
         
 
