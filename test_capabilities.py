@@ -220,7 +220,7 @@ if argumentSet == 2:
         if args.jsonout:
             policy_to_json(policy_file)
     logging.info("All tests completed")
-    print(json.dumps(all_tests))
+    print(json.dumps(all_tests[1:-1]))
 
     if os.environ["GITHUB_ACTIONS"]:
         set_multiline_output("test_results", json.dumps(all_tests))
