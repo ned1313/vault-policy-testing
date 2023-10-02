@@ -74,17 +74,18 @@ def policy_to_json(policy_file):
 
 def prepare_policy(policy_file_path, test_file_path, admin):
     # Create the policy using a temporary name
-    policy_name = policy_file_path.split('.')[0] + "-" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    policy_name = os.path.basename(policy_file_path)
+    temp_policy_name = policy_name.split('.')[0] + "-" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
     # Read the policy file
     with open(policy_file_path) as f:
         policy_content = f.read()
 
     # Create the policy
-    admin.sys.create_or_update_policy(name=policy_name, policy=policy_content)
+    admin.sys.create_or_update_policy(name=temp_policy_name, policy=policy_content)
     
     # Create a token that uses the policy
-    token = admin.auth.token.create(policies=[policy_name], ttl="10m")
+    token = admin.auth.token.create(policies=[temp_policy_name], ttl="10m")
     clientPolicy = hvac.Client(url=os.environ['VAULT_ADDR'], token=token["auth"]["client_token"])
 
     # Open the YAML file at the path and load the tests
@@ -98,7 +99,7 @@ def prepare_policy(policy_file_path, test_file_path, admin):
 
     # Delete the policy
     logging.info("Deleting temporary policy")
-    admin.sys.delete_policy(name=policy_name)
+    admin.sys.delete_policy(name=temp_policy_name)
 
     # Return results
     return results
@@ -214,15 +215,15 @@ if argumentSet == 2:
         logging.info(test_file)
         if os.path.isfile(test_file):
             results = prepare_policy(policy_file, test_file, clientAdmin)
-            all_tests.append(results)
+            all_tests.extend(results)
         else:
             logging.warning("Test file does not exist for " + policy_file +". Skipping policy testing.")
         if args.jsonout:
             policy_to_json(policy_file)
     logging.info("All tests completed")
-    print(json.dumps(all_tests[1:-1]))
+    print(json.dumps(all_tests))
 
-    if os.environ["GITHUB_ACTIONS"]:
+    if os.getenv("GITHUB_ACTIONS") != None:
         set_multiline_output("test_results", json.dumps(all_tests))
 
 if args.vaultdev:
