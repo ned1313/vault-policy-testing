@@ -1,6 +1,11 @@
-name: 'CI Checks'
+name: 'Vault Policy Checks'
 
-on: [push]
+on: [pull_request]
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
 
 jobs:
     build:
@@ -22,8 +27,16 @@ jobs:
             with:
                 directory: 'policies'
                 vault_token: '1234567890qwertyuiopASDFGHJKL'
-          - name: Print Results
-            run: |
-                echo "Results: ${{ steps.vault-tests.outputs.test_results }}"
-        
-
+          - name: Echo Test Results
+            run: echo "${{ steps.vault-tests.outputs.test_results }}"
+          - name: Convert JSON to Table
+            id: table
+            uses: buildingcash/json-to-markdown-table-action@v1
+            with:
+              json: ${{ steps.vault-tests.outputs.test_results }}
+          - name: Add Result Comment
+            id: comment
+            uses: thollander/actions-comment-pull-request@v2
+            with:
+              message: |
+                ${{ steps.table.outputs.table }}
