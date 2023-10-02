@@ -11,3 +11,9 @@ tests:
   - path: 'my_kv/data/taco/recipe'
     actions: [create, read]
     result: true
+  - path: 'secret/data/truck/taco/recipe'
+    actions: [create, update, read, delete]
+    result: true
+  - path: 'secret/data/truck/api_keys'
+    actions: [create, update, read, delete, list]
+    result: false
