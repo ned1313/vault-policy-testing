@@ -7,6 +7,7 @@ from requests import Request, Session
 def test_capabilities(test, admin, client, policy_name):
     test_result = {
         "policy_name": policy_name,
+        "path": test["path"],
         "test_result": "fail",
         "desired_result": test["result"],
         "input_actions": test["actions"],
